@@ -6,12 +6,15 @@ import android.os.Bundle
 import android.view.WindowManager
 import android.widget.Toast
 import com.optic.uberclonekotlin.databinding.ActivityRegisterBinding
+import com.optic.uberclonekotlin.model.Client
 import com.optic.uberclonekotlin.providers.AuthProvider
+import com.optic.uberclonekotlin.providers.ClientProvider
 
 class RegisterActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityRegisterBinding
     private val authProvider = AuthProvider()
+    private val clientProvider = ClientProvider()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,7 +39,21 @@ class RegisterActivity : AppCompatActivity() {
             Toast.makeText(this, "Formulario es valido", Toast.LENGTH_SHORT).show()
             authProvider.register(email, password).addOnCompleteListener {
                 if (it.isSuccessful){
-                    Toast.makeText(this, "Ok", Toast.LENGTH_SHORT).show()
+                    val client = Client(
+                        id = authProvider.getId(),
+                        name = name,
+                        lastname = lastname,
+                        email = email,
+                        phone = phone
+                    )
+                    clientProvider.create(client).addOnCompleteListener {
+                        if (it.isSuccessful){
+                            Toast.makeText(this, "Ok", Toast.LENGTH_SHORT).show()
+                        } else {
+                            Toast.makeText(this, "Ok no", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+
                 }else{
                     Toast.makeText(this, "Ok no", Toast.LENGTH_SHORT).show()
                 }
