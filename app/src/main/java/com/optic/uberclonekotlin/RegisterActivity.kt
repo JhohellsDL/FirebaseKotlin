@@ -6,10 +6,12 @@ import android.os.Bundle
 import android.view.WindowManager
 import android.widget.Toast
 import com.optic.uberclonekotlin.databinding.ActivityRegisterBinding
+import com.optic.uberclonekotlin.providers.AuthProvider
 
 class RegisterActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityRegisterBinding
+    private val authProvider = AuthProvider()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,7 +23,7 @@ class RegisterActivity : AppCompatActivity() {
         binding.btnGoToLogin.setOnClickListener { goToLogin() }
         binding.btnRegister.setOnClickListener { register() }
     }
-    
+
     private fun register() {
         val name = binding.textFieldName.text.toString()
         val lastname = binding.textFieldLastname.text.toString()
@@ -29,22 +31,29 @@ class RegisterActivity : AppCompatActivity() {
         val phone = binding.textFieldPhone.text.toString()
         val password = binding.textFieldPassword.text.toString()
         val confirmPassword = binding.textFieldConfirmPassword.text.toString()
-        
+
         if (isValidForm(name, lastname, email, phone, password, confirmPassword)) {
             Toast.makeText(this, "Formulario es valido", Toast.LENGTH_SHORT).show()
+            authProvider.register(email, password).addOnCompleteListener {
+                if (it.isSuccessful){
+                    Toast.makeText(this, "Ok", Toast.LENGTH_SHORT).show()
+                }else{
+                    Toast.makeText(this, "Ok no", Toast.LENGTH_SHORT).show()
+                }
+            }
         }
-        
+
     }
-    
+
     private fun isValidForm(
-        name: String, 
-        lastname: String, 
-        email: String, 
-        phone: String, 
-        password: String, 
+        name: String,
+        lastname: String,
+        email: String,
+        phone: String,
+        password: String,
         confirmPassword: String
     ): Boolean {
-        
+
         if (name.isEmpty()) {
             Toast.makeText(this, "Debes ingresar tu nombre", Toast.LENGTH_SHORT).show()
             return false
@@ -77,11 +86,11 @@ class RegisterActivity : AppCompatActivity() {
             Toast.makeText(this, "la contraseña deben tener al menos 6 caracteres", Toast.LENGTH_LONG).show()
             return false
         }
-        
+
         return true
-        
+
     }
-    
+
     private fun goToLogin() {
         val i = Intent(this, MainActivity::class.java)
         startActivity(i)
