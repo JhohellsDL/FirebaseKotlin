@@ -11,6 +11,7 @@ import com.optic.uberclonekotlin.databinding.ActivityMapBinding
 
 class MapActivity2: AppCompatActivity(), OnMapReadyCallback {
 
+    //ntrest
 
     private lateinit var binding: ActivityMapBinding
     private var map: GoogleMap? = null
