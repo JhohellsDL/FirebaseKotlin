@@ -6,10 +6,13 @@ import android.os.Bundle
 import android.view.WindowManager
 import android.widget.Toast
 import com.optic.uberclonekotlin.databinding.ActivityMainBinding
+import com.optic.uberclonekotlin.providers.AuthProvider
+import com.optic.uberclonekotlin.ui.MapActivity2
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    private val authProvider = AuthProvider()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -18,9 +21,9 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
 
-
         binding.btnRegister.setOnClickListener { goToRegister() }
         binding.btnLogin.setOnClickListener { login() }
+
     }
 
     private fun login() {
@@ -28,7 +31,14 @@ class MainActivity : AppCompatActivity() {
         val password = binding.textFieldPassword.text.toString()
         
         if (isValidForm(email, password)) {
-            Toast.makeText(this, "Formulario valido", Toast.LENGTH_SHORT).show()
+            authProvider.login(email, password).addOnCompleteListener {
+                if (it.isSuccessful) {
+                    goToMap()
+                } else {
+                    Toast.makeText(this, "usuario no registrado", Toast.LENGTH_SHORT).show()
+                }
+            }
+
         }
     }
     
@@ -50,6 +60,18 @@ class MainActivity : AppCompatActivity() {
     private fun goToRegister() {
         val i = Intent(this, RegisterActivity::class.java)
         startActivity(i)
+    }
+
+    private fun goToMap(){
+        val intent = Intent(this, MapActivity2::class.java)
+        startActivity(intent)
+    }
+
+    override fun onStart() {
+        super.onStart()
+        if (authProvider.existSession()){
+            goToMap()
+        }
     }
 
 }

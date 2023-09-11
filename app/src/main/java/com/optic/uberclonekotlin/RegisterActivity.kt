@@ -9,6 +9,7 @@ import com.optic.uberclonekotlin.databinding.ActivityRegisterBinding
 import com.optic.uberclonekotlin.model.Client
 import com.optic.uberclonekotlin.providers.AuthProvider
 import com.optic.uberclonekotlin.providers.ClientProvider
+import com.optic.uberclonekotlin.ui.MapActivity2
 
 class RegisterActivity : AppCompatActivity() {
 
@@ -49,6 +50,7 @@ class RegisterActivity : AppCompatActivity() {
                     clientProvider.create(client).addOnCompleteListener {
                         if (it.isSuccessful){
                             Toast.makeText(this, "Ok", Toast.LENGTH_SHORT).show()
+                            goToMap()
                         } else {
                             Toast.makeText(this, "Ok no", Toast.LENGTH_SHORT).show()
                         }
@@ -107,6 +109,12 @@ class RegisterActivity : AppCompatActivity() {
         return true
 
     }
+
+    private fun goToMap(){
+        val intent = Intent(this, MapActivity2::class.java)
+        startActivity(intent)
+    }
+
 
     private fun goToLogin() {
         val i = Intent(this, MainActivity::class.java)
