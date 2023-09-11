@@ -16,6 +16,7 @@ class MapActivity2: AppCompatActivity(), OnMapReadyCallback {
     private lateinit var binding: ActivityMapBinding
     private var map: GoogleMap? = null
 
+    //asdasd
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMapBinding.inflate(layoutInflater)
